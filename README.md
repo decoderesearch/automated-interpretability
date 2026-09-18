@@ -2,6 +2,27 @@
 
 This is a fork of OpenAI's `automated-interpretability` [here](https://github.com/openai/automated-interpretability). The README below has not been updated.
 
+## Jev explanation scorers
+
+`neuron_explainer/explanations/jev_scorer.py` scores an explanation against activation records with
+[TypeSafe's Jev](https://docs.typesafe.ai), which returns calibrated probabilities instead of
+generated text. One explanation costs one request. It does not use `NeuronSimulator`, which
+predicts an activation per token, so it is a separate entry point. Set `TYPESAFE_API_KEY`.
+
+```python
+from neuron_explainer.explanations.jev_scorer import JevScorer, JevScoreType
+
+scorer = JevScorer()
+result = await scorer.score(
+    JevScoreType.FUZZ,  # or DETECTION, HOLISTIC
+    explanation="references to dogs as pets",
+    activating_records=neuron_record.most_positive_activation_records[:20],
+    non_activating_records=neuron_record.random_sample[:5],
+    top_logits=[" dog", " dogs"],  # optional; stored as result.logit_fit, never in result.score
+)
+result.score  # 0..1: balanced accuracy (detection, fuzz) or expected rating level / 4 (holistic)
+```
+
 ## Code and tools
 
 This repository contains code and tools associated with the [Language models can explain neurons in
