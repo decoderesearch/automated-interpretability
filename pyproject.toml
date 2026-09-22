@@ -12,7 +12,7 @@ tiktoken = ">=0.6.0"
 scikit-learn = "^1.2.0"
 boostedblob = "^0.15.3"
 blobfile = "^2.1.1"
-numpy = "^1.24.0"
+numpy = ">=1.24.0"
 orjson = "^3.10.1"
 
 [tool.poetry.group.dev.dependencies]
